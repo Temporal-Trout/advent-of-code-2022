@@ -1,4 +1,3 @@
-use std::cmp::Ordering;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -14,17 +13,17 @@ use std::io::{BufRead, BufReader};
 
 /* Advent of Code Day 1-2
 * Goal: Get the top 3 elves by Calories
-*
-*
+* Step 1: Refactor to store all the elf-totals into a vector
+* Step 2: Sort said vector
+* Step 3: Get N (3) largest values and sum them.
 */
 
 // Main must return something so that "?" and "try!" work,
 fn main() -> Result<(), std::io::Error> {
     println!("Advent of Code: Day 1-1!");
-    let mut highest_total: u32 = 0;
     let mut current_total: u32 = 0;
-    let mut elf_number: u32 = 1;
-    let elf_total_vector: Vec<u32> = Vec::new();
+    let mut elf_number: usize = 1;
+    let mut elf_total_vector: Vec<usize> = Vec::new();
 
     let file = File::open("input.txt")?;
     let reader = BufReader::new(file);
@@ -38,26 +37,22 @@ fn main() -> Result<(), std::io::Error> {
             if i > 0 {
                 current_total = current_total + i;
             } else {
-                match current_total.cmp(&highest_total) {
-                    Ordering::Less => {} // Do nothing if the current total is less than the highest total.
-                    Ordering::Equal => {} // Does nothing if the new total equals the old total, favors the older value as a tie-breaker. "You don't set a record tying the old one".
-                    Ordering::Greater => {
-                        // Sets the highest total to be equal to the new current total.
-                        highest_total = current_total;
-                    }
-                }
                 // Increase the elf-count and reset the current total as we are moving onto the next elf.
                 elf_number = elf_number + 1;
+                elf_total_vector.push(current_total.try_into().unwrap());
                 current_total = 0;
             }
-
-            println!("{}", val);
         }
     }
 
-    println!(
-        "Elves Checked: {}, Highest Total Calories: {}",
-        elf_number, highest_total
-    );
+    elf_total_vector.sort_unstable();
+    let slice = &elf_total_vector[(&elf_total_vector.len() - 3)..];
+    let mut top_three: usize = 0;
+    for u in slice {
+        top_three = top_three + u;
+        println!("{}", u);
+    }
+    println!("Top Three Summed: {}", top_three);
+
     Ok(())
 }
