@@ -3,18 +3,12 @@
 // Given a pair of sets A = {i..n}, B = {a..b} determine if one set overlaps between another
 // Since the sets are ordinal and contiguous we only have to check the boundaries.
 
-// Step 1: Split the String into left (A) and right (B) sets, using "," as a separator.
-// Step 2: Get the numeric value of the start (i) and end (n) from each set: i.e: Extract i and n from "i-n"
-// Step 3: Check if they both start at the same position (Ai == Bi) if so they must be the same set or 1 is a sub-set.
-// Step 4: If one starts before the other check if the end of that one is larger than or equal to the end of the other, if it is there's another subset.
-// Step 5: Total the number of times one is a subset of the other, print it out.
-
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::usize;
 // Main must return something so that "?" and "try!" work,
 fn main() -> Result<(), std::io::Error> {
-    println!("Advent of Code: Day 4-1!");
+    println!("Advent of Code: Day 4-2!");
     let mut subset_count: usize = 0;
 
     // Reads the file
