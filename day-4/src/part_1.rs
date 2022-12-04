@@ -1,6 +1,6 @@
-// Advent of Code 2022 4-2
+// Advent of Code 2022 4-1
 
-// Given a pair of sets A = {i..n}, B = {a..b} determine if one set overlaps between another
+// Given a pair of sets A = {i..n}, B = {a..b} determine if one set is a subset of the other. That is: (A ⊂ B) || (B ⊂ A)
 // Since the sets are ordinal and contiguous we only have to check the boundaries.
 
 // Step 1: Split the String into left (A) and right (B) sets, using "," as a separator.
@@ -38,13 +38,19 @@ fn main() -> Result<(), std::io::Error> {
                     for val in val.to_owned().split("-") {
                         right_set.push(val.parse().expect("Right-Set Could not Parse Value"));
                     }
-                    let mut check: bool = false;
-                    if &left_set[0] >= &right_set[0] && &left_set[0] <= &right_set[1] {
+                    // If they both start at the same value they must either be the same set or one must be a sub-set.
+                    if &left_set[0] == &right_set[0] {
                         subset_count = subset_count + 1;
-                        check = true;
                     }
-                    if &right_set[0] >= &left_set[0] && &right_set[0] <= &left_set[1] {
-                        if check == false {
+                    // If the left is bigger (Starts further along) and also smaller (Ends Sooner) then it fits in the right and is a subset.
+                    if &left_set[0] > &right_set[0] {
+                        if &left_set[1] <= &right_set[1] {
+                            subset_count = subset_count + 1;
+                        }
+                    }
+                    // If the right starts further along and ends sooner it's a subset.
+                    if &right_set[0] > &left_set[0] {
+                        if &right_set[1] <= &left_set[1] {
                             subset_count = subset_count + 1;
                         }
                     }
